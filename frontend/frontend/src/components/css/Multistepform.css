@@ -1,0 +1,50 @@
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px;
+  }
+  
+  
+  button {
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+  }
+  
+
+  button.prev {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  button.prev:hover {
+    background-color: #5a6268;
+  }
+  
+
+  button.next {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  button.next:hover {
+    background-color: #0056b3;
+  }
+  
+ 
+  button.submit {
+    background-color: #28a745;
+    color: white;
+    width: 100%;
+  }
+  
+  button.submit:hover {
+    background-color: #218838;
+  }
+  
