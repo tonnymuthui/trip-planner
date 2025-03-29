@@ -77,7 +77,7 @@ const Dashboard = () => {
           </MapContainer>
         </div>
         <div className="daily-log-card-container">
-        <div className="daily-log-card" onClick={() => navigate("/daily-log")}>
+        <div className="daily-log-card" onClick={() => navigate("/multistepform")}>
         <div className="w-full flex items-center justify-between">
                 <div>
                     <h2 className="text-lg font-semibold flex items-center gap-2">

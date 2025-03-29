@@ -5,6 +5,17 @@ const TripDetails = ({ data, handleChange }) => {
   return (
     <div className="trip-details-container">
       <h2>Step 1: Trip & Driver Details</h2>
+      <label>Trip ID (4-digit code):</label>
+      <input
+        type="text"
+        name="trip_id"
+        value={data.trip_id || ""}
+        onChange={handleChange}
+        pattern="\d{4}"
+        maxLength="4"
+        title="Enter a 4-digit Trip ID"
+        required
+      />
       <label>From (Start Location):</label>
       <input type="text" name="start_location" value={data.start_location || ""} onChange={handleChange} required />
       

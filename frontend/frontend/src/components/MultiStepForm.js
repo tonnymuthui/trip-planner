@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import TripDetails from "./TripDetails";
 import LogInputForm from "./LogInputForm";
-// import Remarks from "./Remarks";
-import ComplianceSummary from "./ComplianceSummary";
-import LogSheetComponent from "./LogSheetComponent";
 import axios from "axios";
 import "./css/Multistepform.css";
 
@@ -21,12 +18,6 @@ const MultiStepForm = () => {
       truck_trailer_info: "",
     },
     logs: [],  
-    // remarks: [{
-    //   hour: "",
-    //   location: "",
-    //   reason: "",
-    // }],
-    complianceSummary: {},
   });
 
   const nextStep = () => {
@@ -59,14 +50,16 @@ const MultiStepForm = () => {
           handleChange={(e) => handleChange("tripDetails", { ...formData.tripDetails, [e.target.name]: e.target.value })} 
         />
       )}
-      {step === 2 && <LogInputForm logs={formData.logs} setLogs={(data) => handleChange("logs", data)} />}
-      {/* {step === 3 && <Remarks data={formData.remarks} onChange={(data) => handleChange("remarks", data)} />} */}
-      {step === 3 && <ComplianceSummary data={formData.complianceSummary} onChange={(data) => handleChange("complianceSummary", data)} />}
-      {step === 4 && <LogSheetComponent logs={formData.logs} />}
+      {step === 2 && (
+        <LogInputForm 
+          logs={formData.logs} 
+          setLogs={(data) => handleChange("logs", data)} 
+        />
+      )}
 
       <div className="button-container">
         {step > 1 && <button className="prev" onClick={prevStep}>Previous</button>}
-        {step < 4 ? <button className="next" onClick={nextStep}>Next</button> : <button className="submit" onClick={handleSubmit}>Submit</button>}
+        {step === 1 ? <button className="next" onClick={nextStep}>Next</button> : <button className="submit" onClick={handleSubmit}>Submit</button>}
       </div>
     </div>
   );

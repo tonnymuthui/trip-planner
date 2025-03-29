@@ -30,5 +30,6 @@ urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'), 
     path('auth/', include('dj_rest_auth.urls')), 
     path('auth/registration/', include('dj_rest_auth.registration.urls')),
+    path('api/', include('trips.urls')),
     # path('api/auth/', include('rest_auth.urls')),
 ]
