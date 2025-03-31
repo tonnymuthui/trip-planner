@@ -18,7 +18,17 @@ from django.contrib import admin
 
 from django.http import HttpResponse
 from django.urls import path, include
-from trips.views import SignupView, LoginView  
+# from rest_framework.routers import DefaultRouter
+from trips.views import SignupView, LoginView, TripViewSet, LogEntryViewSet  
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,  
+    TokenRefreshView, 
+    TokenVerifyView,
+)
+
+# router = DefaultRouter()
+# router.register(r'trips', TripViewSet)
+# router.register(r'logentries', LogEntryViewSet)
 
 def home(request):
     return HttpResponse("Welcome to the Trip Planner API!")
@@ -31,5 +41,9 @@ urlpatterns = [
     path('auth/', include('dj_rest_auth.urls')), 
     path('auth/registration/', include('dj_rest_auth.registration.urls')),
     path('api/', include('trips.urls')),
+    # path('api/', include(router.urls)),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     # path('api/auth/', include('rest_auth.urls')),
 ]

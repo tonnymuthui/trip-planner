@@ -31,14 +31,65 @@ const MultiStepForm = () => {
     setFormData((prevData) => ({ ...prevData, [section]: data }));
   };
 
+  const formatDateTime = (datetime) => {
+    return datetime ? new Date(datetime).toISOString() : null;  // Ensure valid ISO format
+  };
+
   const handleSubmit = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/create_trip/", formData);
-      console.log("Trip submitted successfully:", response.data);
-      alert("Trip created successfully!");
+      const token = localStorage.getItem("authToken");
+
+      if (!token) {
+        console.error("No authentication token found! Make sure you're logged in.");
+        alert("Authentication token is missing!");
+        return;
+      }
+
+      console.log(" Submitting Trip Data:", formData.tripDetails);
+      console.log(" Logs Before Submission:", formData.logs);
+
+      if (formData.logs.length === 0) {
+        alert("No logs found! Please enter at least one log before submitting.");
+        return;
+      }
+
+      // 1️⃣ Submit the trip
+      const tripResponse = await axios.post(
+        "http://127.0.0.1:8000/api/create_trip/",
+        formData.tripDetails,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      console.log("Trip submitted successfully:", tripResponse.data);
+
+      const tripId = tripResponse.data.trip_id; // Ensure trip_id exists
+      if (!tripId) {
+        throw new Error("Trip ID missing in API response");
+      }
+
+      // 2️⃣ Format logs before submission with correct field names
+      const formattedLogs = formData.logs.map(log => ({
+        start_time: formatDateTime(log.startTime),
+        end_time: formatDateTime(log.endTime),
+        duty_status: log.dutyStatus,
+        location: log.location || "Unknown",
+        remarks: log.remarks || "N/A",
+        trip: tripId, 
+      }));
+
+      // 3️⃣ Submit logs in one request instead of multiple
+      if (formattedLogs.length > 0) {
+        await axios.post(
+          `http://127.0.0.1:8000/api/trips/${tripId}/logs/`,
+          formattedLogs,
+          { headers: { Authorization: `Bearer ${token}`} } 
+        );
+      }
+
+      alert("Trip and logs submitted successfully!");
     } catch (error) {
-      console.error("Error submitting trip:", error);
-      alert("Failed to submit trip.");
+      console.error("Error submitting trip/logs:", error);
+      alert("Failed to submit trip and logs.");
     }
   };
 

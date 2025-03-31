@@ -1,0 +1,76 @@
+.trip-map-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: white;
+  }
+  
+  .trip-header {
+    margin-bottom: 20px;
+  }
+  
+  .trip-header h2 {
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .trip-details {
+    display: flex;
+    gap: 20px;
+    color: #666;
+  }
+  
+  .loading, .error, .no-data {
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 600px;
+  }
+  
+  .loading {
+    background-color: #f9f9f9;
+  }
+  
+  .error {
+    background-color: #fff0f0;
+    color: #d32f2f;
+  }
+  
+  .no-data {
+    background-color: #f0f8ff;
+    color: #0277bd;
+  }
+  
+  .location-popup {
+    min-width: 200px;
+  }
+  
+  .location-popup h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+  }
+  
+  .duty-logs h4 {
+    margin: 10px 0 5px;
+  }
+  
+  .duty-logs ul {
+    padding-left: 15px;
+    margin: 0;
+  }
+  
+  .duty-logs li {
+    margin-bottom: 10px;
+  }
+  
+  .remarks {
+    font-style: italic;
+    color: #666;
+    margin-top: 3px;
+  }

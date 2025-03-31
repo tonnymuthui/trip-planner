@@ -5,10 +5,31 @@ class TripSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trip
         fields = '__all__'
-        read_only_fields = ['user', 'created_at']
+       
 
 
 class LogEntrySerializer(serializers.ModelSerializer):
+    trip = serializers.PrimaryKeyRelatedField(queryset=Trip.objects.all(), required=True)
+
     class Meta:
         model = LogEntry
         fields = '__all__'
+
+    def create(self, validated_data):
+        # We don't need to manually fetch the trip instance, as the serializer will handle it
+        return super().create(validated_data)
+
+
+class TripDetailSerializer(serializers.ModelSerializer):
+    logs = LogEntrySerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = Trip
+        fields = [
+            'id', 'trip_id', 'user', 
+            'start_location', 'start_latitude', 'start_longitude',
+            'destination', 'destination_latitude', 'destination_longitude',
+            'miles_driving_today', 'total_mileage_today', 'carrier_name', 
+            'main_office_address', 'home_terminal_address', 
+            'truck_trailer_info', 'created_at', 'logs'
+        ]

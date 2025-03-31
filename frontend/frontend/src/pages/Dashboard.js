@@ -38,13 +38,14 @@ const Dashboard = () => {
     <div className="sidebar-profile-image"></div>
     <div className="sidebar-profile-details">
       <div className="sidebar-profile-name">{user.name}</div>
-      <div className="sidebar-profile-role">Dashboard User</div>
+      <div className="sidebar-profile-role">User</div>
     </div>
   </div>
         <h2>Dashboard</h2>
         <ul>
           <li>Overview</li>
-          <li>Logs</li>
+          <li onClick={() => navigate("/generatereport")}>Logs</li>
+          <li onClick={() => navigate("/tripviewer")}>View Trip Route</li>
           <li>Settings</li>
         </ul>
       </aside>

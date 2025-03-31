@@ -20,8 +20,8 @@ const Login = () => {
 
       const response = await login(credentials);
       console.log("Login Response:", response);
-      if(response.status === 200){
-        localStorage.setItem("token", response.data.token); 
+      if(response.token){
+        localStorage.setItem("authToken", response.token); 
         console.log("Redirecting to dashboard...");
         
       }

@@ -30,7 +30,9 @@ export const login = async (credentials) => {
     console.log("Login successful:", response.data);
 
     
-    localStorage.setItem("authToken", response.data.token);
+    localStorage.setItem("authToken", response.data.authToken);  
+    localStorage.setItem("refreshToken", response.data.refreshToken);
+    
 
     return response.data;
   } catch (error) {

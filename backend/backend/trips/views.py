@@ -2,14 +2,14 @@
 
 # Create your views here.
 
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets, generics
 from .models import Trip, LogEntry
 from django.contrib.auth import authenticate
-from .serializers import TripSerializer, LogEntrySerializer
-
+from .serializers import TripSerializer, LogEntrySerializer, TripDetailSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
@@ -47,32 +47,42 @@ class LoginView(APIView):
         user = authenticate(username=username, password=password)
 
         if user:
-            token, _ = Token.objects.get_or_create(user=user)
-            return Response({"message": "Login successful", "token": token.key}, status=status.HTTP_200_OK)
+            refresh = RefreshToken.for_user(user)  # ✅ Generate JWT tokens correctly
+            return Response({
+                "message": "Login successful",
+                "authToken": str(refresh.access_token),  
+                "refreshToken": str(refresh),
+            }, status=status.HTTP_200_OK)
 
         return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
-
 @api_view(['POST'])
-
-@permission_classes([IsAuthenticated])  
+@permission_classes([IsAuthenticated])
 def create_trip(request):
+    print("=== DEBUGGING create_trip ===")
+    print("Incoming data:", request.data)
+
     user = request.user  
     today = date.today()
 
-    # Check if a trip for today already exists for this user
-    if Trip.objects.filter(user=user, created_at__date=today).exists():
-        return Response({"error": "You have already submitted a trip for today."}, status=status.HTTP_400_BAD_REQUEST)
+    # Check if a trip already exists for today
+    existing_trip = Trip.objects.filter(user=user, created_at__date=today).first()
 
-    # Attach the user to the trip before saving
-    request.data['user'] = user.id  # Ensure the user is assigned
+    if existing_trip:
+        print("Trip exists. Updating instead of creating a new one.")
+        serializer = TripSerializer(existing_trip, data=request.data, partial=True)  # Allow partial updates
+    else:
+        serializer = TripSerializer(data=request.data)
 
-    serializer = TripSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(user=user)  # Save trip with user association
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer.save(user=user)
+        return Response(serializer.data, status=status.HTTP_200_OK if existing_trip else status.HTTP_201_CREATED)
 
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    print(" VALIDATION ERRORS:", serializer.errors)
+    return Response({"error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 
 class TripReportView(RetrieveAPIView):
@@ -118,7 +128,65 @@ class TripLogsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, trip_id):
+        print("Received trip logs data:", request.data)  # Debugging
         trip = get_object_or_404(Trip, trip_id=trip_id, user=request.user)
         logs = LogEntry.objects.filter(trip=trip)
         serializer = LogEntrySerializer(logs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, trip_id):  # 🚀 ADDING POST METHOD
+        trip = get_object_or_404(Trip, trip_id=trip_id, user=request.user)
+        print("Incoming data:", request.data)
+        
+        log_data = request.data  # Ensure this is a list of dictionaries
+
+        # Iterate over each log entry and update the trip field
+        for log in log_data:
+            log["trip"] = trip.id # ✅ Correct way to assign trip ID to each log entry
+
+        serializer = LogEntrySerializer(data=log_data, many=True)  # ✅ `many=True` is needed!
+
+        if serializer.is_valid():
+            serializer.save()  # Save all logs at once
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        print("Validation errors:", serializer.errors)  # Debugging
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        
+class TripViewSet(viewsets.ModelViewSet):
+    queryset = Trip.objects.all()
+    serializer_class = TripSerializer
+    lookup_field = 'trip_id'  # Use trip_id instead of id for lookups
+    
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return TripDetailSerializer
+        return TripSerializer
+    
+    # Optional: Filter trips by the current user
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+            return Trip.objects.filter(user=user).order_by('-created_at')
+        return Trip.objects.none()
+    
+    @action(detail=True, methods=['get'], url_path='logs')
+    def get_logs(self, request, trip_id=None):
+        """Get all log entries for a specific trip using trip_id"""
+        trip = self.get_object()  # This will use trip_id for lookup
+        logs = LogEntry.objects.filter(trip=trip).order_by('start_time')
+        serializer = LogEntrySerializer(logs, many=True)
+        return Response(serializer.data)
+
+class LogEntryViewSet(viewsets.ModelViewSet):
+    queryset = LogEntry.objects.all()
+    serializer_class = LogEntrySerializer
+    
+    # Filter log entries by trip_id
+    def get_queryset(self):
+        queryset = LogEntry.objects.all().order_by('start_time')
+        trip_id = self.request.query_params.get('trip_id', None)
+        if trip_id:
+            queryset = queryset.filter(trip__trip_id=trip_id)  # Note the trip__trip_id syntax
+        return queryset

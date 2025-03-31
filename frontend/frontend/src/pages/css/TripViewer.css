@@ -1,0 +1,51 @@
+.trip-viewer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .trip-selector {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .trip-selector h1 {
+    margin-top: 0;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .select-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .select-container label {
+    font-weight: bold;
+    min-width: 100px;
+  }
+  
+  .select-container select {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    background-color: white;
+  }
+  
+  @media (max-width: 768px) {
+    .select-container {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    
+    .select-container select {
+      width: 100%;
+    }
+  }
