@@ -1,54 +1,57 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { FaClock } from "react-icons/fa";
+import "./css/ComplianceSummary.css";
 
-const ComplianceSummary = ({ data, hourlyLogs = [], onChange }) => {
-  const [complianceData, setComplianceData] = useState(data);
+const ComplianceSummary = () => {
+  const [totalDrivenTime, setTotalDrivenTime] = useState(0);
+  const [remainingTimeToDrive, setRemainingTimeToDrive] = useState(0);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!hourlyLogs || hourlyLogs.length === 0) {
-      setComplianceData({});
-      return;
-    }
+    const fetchComplianceData = async () => {
+      const token = localStorage.getItem("authToken");
 
-    const calculateCompliance = () => {
-      const totalDriving = hourlyLogs.reduce((acc, log) => acc + (Number(log.driving) || 0), 0);
-      const totalOnDuty = hourlyLogs.reduce((acc, log) => acc + (Number(log.onDuty) || 0), 0);
-      const totalOffDuty = hourlyLogs.reduce((acc, log) => acc + (Number(log.offDuty) || 0), 0);
-      const totalSleeper = hourlyLogs.reduce((acc, log) => acc + (Number(log.sleeperBerth) || 0), 0);
+      if (!token) {
+        setError("No authentication token found.");
+        return;
+      }
 
-      const newComplianceData = {
-        totalDrivingHours: totalDriving,
-        totalOnDutyHours: totalOnDuty,
-        totalOffDutyHours: totalOffDuty,
-        totalSleeperHours: totalSleeper,
-        drivingLimitExceeded: totalDriving > 11,
-        onDutyLimitExceeded: totalOnDuty > 14,
-      };
+      try {
+        const response = await axios.get("http://localhost:8000/api/compliance-summary/", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
 
-      setComplianceData(newComplianceData);
-      onChange(newComplianceData);
+        setTotalDrivenTime(response.data.total_driven_time.toFixed(2));
+        setRemainingTimeToDrive(response.data.remaining_time_to_drive.toFixed(2));
+      } catch (error) {
+        console.error("Error fetching compliance data:", error);
+        setError("Failed to fetch compliance data. Please try again later.");
+      }
     };
 
-    calculateCompliance();
-  }, [hourlyLogs, onChange]);
+    fetchComplianceData();
+  }, []);
 
   return (
-    <div>
-      <h2>Compliance Summary</h2>
-      {complianceData.totalDrivingHours !== undefined ? (
-        <>
-          <p>
-            Total Driving Hours: {complianceData.totalDrivingHours}{" "}
-            {complianceData.drivingLimitExceeded && "⚠ Over Limit!"}
-          </p>
-          <p>
-            Total On Duty Hours: {complianceData.totalOnDutyHours}{" "}
-            {complianceData.onDutyLimitExceeded && "⚠ Over Limit!"}
-          </p>
-          <p>Total Off Duty Hours: {complianceData.totalOffDutyHours}</p>
-          <p>Total Sleeper Berth Hours: {complianceData.totalSleeperHours}</p>
-        </>
+    <div className="compliance-summary-container">
+      {error ? (
+        <p className="error-message">{error}</p>
       ) : (
-        <p>No data available.</p>
+        <>
+          <h2 className="heading">   Compliance Summary</h2>
+          <div className="metric-card">
+            <FaClock className="icon" />
+            <div className="metric">
+              <p className="metric-value">{totalDrivenTime} hrs</p>
+              <p className="metric-label">Driven this cycle</p>
+            </div>
+            <div className="metric">
+              <p className="metric-value">{remainingTimeToDrive} hrs</p>
+              <p className="metric-label">Remaining to drive</p>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

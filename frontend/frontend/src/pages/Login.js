@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styles from "../styles/Auth.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../api/auth";
@@ -8,43 +8,104 @@ const Login = () => {
     username: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
+    setError(""); // Clear error when user types
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
+    
     try {
-
       const response = await login(credentials);
-      console.log("Login Response:", response);
-      if(response.token){
-        localStorage.setItem("authToken", response.token); 
-        console.log("Redirecting to dashboard...");
+      if (response.token) {
+        localStorage.setItem("authToken", response.token);
         
       }
       navigate("/dashboard");
-      alert("Login successful!");
     } catch (error) {
-      alert("Login failed. Check console for details.");
+      setError("Invalid username or password. Please try again.");
+      console.error("Login error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-
-
-
   return (
     <div className={styles.authWrapper}>
+      {/* Background animations */}
+      <div className={styles.roadAnimation}>
+        <div className={styles.roadLines}></div>
+      </div>
+      <div className={styles.truckContainer}>
+        <div className={styles.truck}></div>
+        <div className={styles.truck}></div>
+      </div>
+      
       <div className={styles.authContainer}>
-        <h2 className={styles.authTitle}>Login</h2>
-        <form onSubmit={handleSubmit}>
-        <input type="text" name="username" placeholder="Username" className={styles.authInput} onChange={handleChange} required />
-        <input type="password" name="password" placeholder="Password" className={styles.authInput} onChange={handleChange} required />
-        <button type="submit" className={styles.authButton} >Login</button>
-        </form>
-        <Link to="/signup" className={styles.authLink}>Don't have an account? Sign Up</Link>
+        {/* Header section */}
+        <div className={styles.authHeader}>
+          <div className={styles.logoContainer}>
+            {/* If you have a logo, uncomment this line: */}
+            {/* <img src="/logo.png" alt="Trucking Logger" className={styles.logo} /> */}
+          </div>
+        </div>
+        
+        <div className={styles.authForm}>
+          <h2 className={styles.authTitle}>Login</h2>
+          
+          {error && <div className={styles.errorMessage}>{error}</div>}
+          
+          <form onSubmit={handleSubmit}>
+            <div className={styles.fieldGroup}>
+              <label htmlFor="username" className={styles.fieldLabel}>Username</label>
+              <input
+                id="username"
+                type="text"
+                name="username"
+                placeholder="Enter your username"
+                className={styles.authInput}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            
+            <div className={styles.fieldGroup}>
+              <label htmlFor="password" className={styles.fieldLabel}>Password</label>
+              <input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                className={styles.authInput}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            
+            <Link to="/forgot-password" className={styles.forgotPassword}>
+              Forgot password?
+            </Link>
+            
+            <button
+              type="submit"
+              className={`${styles.authButton} ${loading ? styles.loading : ""}`}
+              disabled={loading}
+            >
+              {loading ? <span className={styles.loadingIndicator}></span> : "Login"}
+            </button>
+          </form>
+          
+          <Link to="/signup" className={styles.authLink}>
+            Don't have an account? Sign Up
+          </Link>
+        </div>
       </div>
     </div>
   );

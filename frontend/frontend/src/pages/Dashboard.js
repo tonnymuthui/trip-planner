@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 // import {motion} from "framer-motion";
 // import { Card, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { ArrowRight, ClipboardCheck } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import ComplianceSummary from "../components/ComplianceSummary";
 import { format } from "date-fns";
 import { FaClock, FaMapMarkerAlt, FaUser, FaBars } from "react-icons/fa";
 import "./css/backup.css";
@@ -16,6 +18,28 @@ const Dashboard = () => {
   const [lastLocation, setLastLocation] = useState({ lat: 37.7749, lng: -122.4194 }); // Example: San Francisco
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+
+    
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/user/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+       
+        setUser({ name: response.data.username });
+      } catch (error) {
+        console.error("Error fetching user data", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -38,15 +62,15 @@ const Dashboard = () => {
     <div className="sidebar-profile-image"></div>
     <div className="sidebar-profile-details">
       <div className="sidebar-profile-name">{user.name}</div>
-      <div className="sidebar-profile-role">User</div>
+      <div className="sidebar-profile-role">Driver</div>
     </div>
   </div>
-        <h2>Dashboard</h2>
+        <h2>Hello There!</h2>
         <ul>
           <li>Overview</li>
-          <li onClick={() => navigate("/generatereport")}>Logs</li>
+          <li onClick={() => navigate("/reportviewer")}>Logs</li>
           <li onClick={() => navigate("/tripviewer")}>View Trip Route</li>
-          <li>Settings</li>
+          <li>Log Out</li>
         </ul>
       </aside>
 
@@ -60,10 +84,7 @@ const Dashboard = () => {
             <FaUser className="icon" />
             <p>{user.name}</p>
           </div>
-          <div className="metric-card">
-            <FaClock className="icon" />
-            <p>{totalHours} hrs logged this week</p>
-          </div>
+          <ComplianceSummary/>
         </div>
 
         <div className="map-container">

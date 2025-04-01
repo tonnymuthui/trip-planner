@@ -1,78 +1,458 @@
-/* Trip Report Page Styling */
+/* report.css - Enhanced for elegant visualization */
+
 .report-container {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    font-family: "Arial", sans-serif;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: #2d3748;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  background-color: transparent;
+}
+
+.report-header {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2d3748;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  padding-bottom: 15px;
+  position: relative;
+}
+
+.report-header:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #3182ce, #63b3ed);
+  border-radius: 2px;
+}
+
+.input-section {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  padding: 25px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.trip-id-input {
+  flex: 1;
+  padding: 14px 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s;
+  color: #2d3748;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.trip-id-input:focus {
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.3);
+  outline: none;
+}
+
+.generate-btn {
+  padding: 14px 28px;
+  background: linear-gradient(90deg, #3182ce, #4299e1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+  letter-spacing: 0.3px;
+}
+
+.generate-btn:hover {
+  background: linear-gradient(90deg, #2b6cb0, #3182ce);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(66, 153, 225, 0.4);
+}
+
+.generate-btn:disabled {
+  background: linear-gradient(90deg, #a0aec0, #cbd5e0);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.error-message {
+  color: #e53e3e;
+  padding: 15px 20px;
+  background-color: #fff5f5;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  font-weight: 500;
+  border-left: 5px solid #e53e3e;
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.1);
+}
+
+.loading-indicator {
+  text-align: center;
+  color: #4a5568;
+  padding: 30px;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.loading-indicator:before {
+  content: "";
+  width: 24px;
+  height: 24px;
+  border: 3px solid #e2e8f0;
+  border-top: 3px solid #3182ce;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.report-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  width: 100%;
+}
+
+.trip-details {
+  margin-bottom: 0;
+  padding: 30px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.trip-details:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.trip-details h3 {
+  margin-top: 0;
+  margin-bottom: 25px;
+  color: #2d3748;
+  font-size: 24px;
+  font-weight: 600;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 15px;
+  position: relative;
+}
+
+.trip-details h3:after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #3182ce, #63b3ed);
+  border-radius: 3px;
+}
+
+.trip-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  background-color: #f7fafc;
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.info-item:hover {
+  background-color: #edf2f7;
+  transform: translateY(-2px);
+}
+
+.info-label {
+  font-weight: 600;
+  color: #718096;
+  margin-bottom: 8px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 18px;
+  font-weight: 500;
+  color: #2d3748;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.active {
+  background-color: #c6f6d5;
+  color: #276749;
+}
+
+.status-badge.completed {
+  background-color: #bee3f8;
+  color: #2c5282;
+}
+
+.status-badge.cancelled {
+  background-color: #fed7d7;
+  color: #c53030;
+}
+
+.chart-section {
+  padding: 30px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.chart-section:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.chart-section h3 {
+  margin-top: 0;
+  margin-bottom: 25px;
+  color: #2d3748;
+  font-size: 24px;
+  font-weight: 600;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 15px;
+  position: relative;
+}
+
+.chart-section h3:after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #3182ce, #63b3ed);
+  border-radius: 3px;
+}
+
+.chart-container {
+  margin-bottom: 30px;
+  background-color: #f7fafc;
+  padding: 25px;
+  border-radius: 12px;
+  border: none;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.custom-tooltip {
+  background-color: rgba(255, 255, 255, 0.95);
+  border: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.custom-tooltip p {
+  margin: 5px 0;
+  color: #2d3748;
+}
+
+.custom-tooltip .time {
+  font-weight: 600;
+  color: #3182ce;
+  font-size: 14px;
+}
+
+.custom-tooltip .status {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.custom-tooltip .duration {
+  font-weight: 400;
+  color: #718096;
+  font-size: 14px;
+}
+
+.status-summary {
+  margin-top: 30px;
+}
+
+.status-summary h4 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #2d3748;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #f7fafc;
+  border-radius: 10px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.status-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.status-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #4a5568;
+}
+
+.status-time {
+  font-weight: 700;
+  color: #2d3748;
+  font-size: 18px;
+  padding: 4px 12px;
+  background-color: #ebf8ff;
+  border-radius: 6px;
+}
+
+.no-data-message {
+  padding: 50px;
+  text-align: center;
+  background-color: #f7fafc;
+  border-radius: 12px;
+  color: #718096;
+  font-size: 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.report-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+  gap: 15px;
+}
+
+.print-btn {
+  padding: 12px 25px;
+  background: linear-gradient(90deg, #4a5568, #718096);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(74, 85, 104, 0.3);
+}
+
+.print-btn:hover {
+  background: linear-gradient(90deg, #2d3748, #4a5568);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(74, 85, 104, 0.4);
+}
+
+.print-btn:before {
+  content: ""; 
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 6 2 18 2 18 9'%3E%3C/polyline%3E%3Cpath d='M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2'%3E%3C/path%3E%3Crect x='6' y='14' width='12' height='8'%3E%3C/rect%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+/* Print styles */
+@media print {
+  .input-section, .report-actions {
+    display: none;
   }
   
-  .report-header {
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
+  .report-container {
+    padding: 0;
   }
   
-  .input-section {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
+  .report-content {
+    gap: 15px;
   }
   
-  .input-section input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    width: 50%;
-  }
-  
-  .input-section button {
-    padding: 10px 15px;
-    border: none;
-    background: #007bff;
-    color: white;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .input-section button:hover {
-    background: #0056b3;
-  }
-  
-  .error-message {
-    text-align: center;
-    color: red;
-    font-size: 14px;
-    margin-bottom: 15px;
-  }
-  
-  .trip-details {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 5px;
-    border-left: 5px solid #007bff;
-    margin-bottom: 20px;
-  }
-  
-  .trip-info p {
-    margin: 5px 0;
-    font-size: 16px;
+  .trip-details, .chart-section {
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
   }
   
   .chart-container {
-    text-align: center;
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background: #fafafa;
+    page-break-inside: avoid;
   }
   
+  .status-summary {
+    page-break-inside: avoid;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .report-container {
+    padding: 0;
+  }
+  
+  .input-section {
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .trip-details, .chart-section {
+    padding: 20px;
+  }
+  
+  .trip-info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* For larger screens, make use of full width */
+@media (min-width: 1400px) {
+  .chart-container {
+    height: 450px !important;
+  }
+}

@@ -3,8 +3,9 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import MultiStepForm from "./components/MultiStepForm";
-import GenerateReport from "./components/GenerateReport";
+
 import TripViewer from "./pages/TripViewer";
+import ReportViewer from "./pages/ReportViewer";
 function App() {
   return (
     <Router>
@@ -14,7 +15,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} /> 
         <Route path="/multistepform" element={<MultiStepForm />} />
-        <Route path="/generatereport" element={<GenerateReport />} />
+        <Route path="/reportviewer" element={<ReportViewer />} />
         <Route path="/tripviewer" element={<TripViewer />} />
       </Routes>
     </Router>

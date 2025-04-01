@@ -14,9 +14,10 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
-from datetime import date
+from datetime import date, timedelta
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import RetrieveAPIView
+from django.utils import timezone
 
 
 class SignupView(APIView):
@@ -174,7 +175,7 @@ class TripViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'], url_path='logs')
     def get_logs(self, request, trip_id=None):
         """Get all log entries for a specific trip using trip_id"""
-        trip = self.get_object()  # This will use trip_id for lookup
+        trip = self.get_object()  
         logs = LogEntry.objects.filter(trip=trip).order_by('start_time')
         serializer = LogEntrySerializer(logs, many=True)
         return Response(serializer.data)
@@ -190,3 +191,53 @@ class LogEntryViewSet(viewsets.ModelViewSet):
         if trip_id:
             queryset = queryset.filter(trip__trip_id=trip_id)  # Note the trip__trip_id syntax
         return queryset
+
+
+class UserInfoView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Access the current user using request.user
+        username = request.user.username
+        return Response({"username": username}, status=status.HTTP_200_OK)
+
+class ComplianceSummaryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        today = timezone.now()
+        start_date = today - timedelta(days=8)  # 8 days ago from today
+
+        logs = LogEntry.objects.filter(
+            trip__user=user,
+            start_time__gte=start_date,
+            end_time__lte=today
+        )
+
+        print(f"Total logs fetched: {logs.count()}")  # Debugging line
+
+        total_driven_time = timedelta() 
+        total_on_duty_time = timedelta()
+
+        for log in logs:
+            print(f"Duty Status: {log.duty_status}")  # Debugging line
+            duration = log.end_time - log.start_time
+            print(f"Log from {log.start_time} to {log.end_time}, Duration: {duration}")  # Debugging line
+            if log.duty_status == "Driving":
+                total_driven_time += duration  # Accumulating the time for "driving" logs
+                print(f"Cumulative Total Driven Time: {total_driven_time}")  # Debugging line
+    
+            elif log.duty_status == "On Duty":
+                total_on_duty_time += duration  # Accumulating for on-duty logs
+
+        max_driving_time = timedelta(hours=70)
+        remaining_time_to_drive = max_driving_time - total_driven_time
+
+        print(f"Total driven time: {total_driven_time.total_seconds() / 3600} hours")  # Debugging line
+        print(f"Remaining time to drive: {remaining_time_to_drive.total_seconds() / 3600} hours")  # Debugging line
+
+        return Response({
+            "total_driven_time": total_driven_time.total_seconds() / 3600,
+            "remaining_time_to_drive": remaining_time_to_drive.total_seconds() / 3600
+        })

@@ -2,6 +2,9 @@ from rest_framework import serializers
 from .models import Trip, LogEntry
 
 class TripSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.username', read_only=True)
+
+    
     class Meta:
         model = Trip
         fields = '__all__'
@@ -10,7 +13,7 @@ class TripSerializer(serializers.ModelSerializer):
 
 class LogEntrySerializer(serializers.ModelSerializer):
     trip = serializers.PrimaryKeyRelatedField(queryset=Trip.objects.all(), required=True)
-
+    
     class Meta:
         model = LogEntry
         fields = '__all__'
@@ -21,6 +24,8 @@ class LogEntrySerializer(serializers.ModelSerializer):
 
 
 class TripDetailSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.username', read_only=True)
+
     logs = LogEntrySerializer(many=True, read_only=True)
     
     class Meta:

@@ -4,7 +4,7 @@ from django.utils.timezone import now
 
 class Trip(models.Model):
     trip_id = models.CharField(max_length=10, unique=True, default="0000")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # Link to logged-in user
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  
     start_location = models.CharField(max_length=255, default="Unknown")
     start_latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     start_longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
