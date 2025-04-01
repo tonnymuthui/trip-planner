@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-@!xr#i7zf)%@%lzlz4$dsshbxm35c(4avb4s-cv(=xaxajhlkb
 # # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['trip-planner-1-x88j.onrender.com']
+ALLOWED_HOSTS = ['trip-planner-1-x88j.onrender.com', 'trip-planner-six-jade.vercel.app']
 
 
 

@@ -11,7 +11,7 @@
 // };
 import axios from "axios";
 
-const API_URL = "https://trip-planner-1-x88j.onrender.com/api/"; 
+const API_URL = "https://trip-planner-1-x88j.onrender.com/api"; 
 
 export const signup = async (userData) => {
   try {
