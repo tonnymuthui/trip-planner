@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "../styles/Auth.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { signup } from "../api/auth";
+import logo from "./logo2.png"
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ const Signup = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError(""); // Clear error when user types
+    setError(""); 
   };
 
   const handleSubmit = async (e) => {
@@ -38,7 +39,7 @@ const Signup = () => {
 
   return (
     <div className={styles.authWrapper}>
-      {/* Background animations */}
+      
       <div className={styles.roadAnimation}>
         <div className={styles.roadLines}></div>
       </div>
@@ -48,11 +49,11 @@ const Signup = () => {
       </div>
       
       <div className={styles.authContainer}>
-        {/* Header section */}
+        
         <div className={styles.authHeader}>
           <div className={styles.logoContainer}>
-            {/* If you have a logo, uncomment this line: */}
-            {/* <img src="/logo.png" alt="Trucking Logger" className={styles.logo} /> */}
+           
+            <img src={logo} alt="Trucking Logger" className={styles.logo} />
           </div>
         </div>
         

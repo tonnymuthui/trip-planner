@@ -1,9 +1,7 @@
-/* Auth.module.css - Professional Trucking App Authentication Styling */
 
-/* Import font */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* Base styles */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -18,19 +16,19 @@ body {
   width: 100%;
 }
 
-/* Main auth wrapper */
+
 .authWrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  width: 100%;
+  width: 100vw;
   background: linear-gradient(135deg, #1e3a8a 0%, #233876 100%);
   position: relative;
   overflow: hidden;
 }
 
-/* Background pattern */
+
 .authWrapper::before {
   content: "";
   position: fixed;
@@ -45,7 +43,7 @@ body {
   z-index: 1;
 }
 
-/* Decorative truck routes */
+
 .authWrapper::after {
   content: "";
   position: fixed;
@@ -57,7 +55,7 @@ body {
   z-index: 2;
 }
 
-/* Auth container */
+
 .authContainer {
   width: 430px;
   max-width: 90%;
@@ -70,7 +68,7 @@ body {
   animation: fadeIn 0.5s ease-out;
 }
 
-/* Header section */
+
 .authHeader {
   background: linear-gradient(90deg, #1e3a8a, #233876);
   padding: 25px 0;
@@ -79,7 +77,7 @@ body {
   text-align: center;
 }
 
-/* Add this class to your HTML structure */
+
 .authHeader::before {
   content: "";
   position: absolute;
@@ -91,20 +89,20 @@ body {
   z-index: 1;
 }
 
-/* Logo container */
+
 .logoContainer {
   margin-bottom: 10px;
   position: relative;
   z-index: 2;
 }
 
-/* Logo styling */
+
 .logo {
-  height: 50px;
+  height: 120px;
   width: auto;
 }
 
-/* Title styling */
+
 .authTitle {
   font-size: 24px;
   font-weight: 700;
@@ -114,7 +112,7 @@ body {
   position: relative;
 }
 
-/* Title underline accent */
+
 .authTitle::after {
   content: "";
   display: block;
@@ -125,12 +123,12 @@ body {
   border-radius: 2px;
 }
 
-/* Form section */
+
 .authForm {
   padding: 25px 35px 35px;
 }
 
-/* Input styling */
+
 .authInput {
   width: 100%;
   padding: 14px 16px;
@@ -154,7 +152,7 @@ body {
   color: #94a3b8;
 }
 
-/* Button styling */
+
 .authButton {
   width: 100%;
   padding: 14px;
@@ -171,26 +169,26 @@ body {
   margin-top: 10px;
 }
 
-/* Button hover state */
+
 .authButton:hover {
   background: #1e40af;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
 }
 
-/* Button active state */
+
 .authButton:active {
   transform: translateY(0);
   box-shadow: none;
 }
 
-/* Button focus state */
+
 .authButton:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.4);
 }
 
-/* Link styling */
+
 .authLink {
   display: block;
   text-align: center;
@@ -205,7 +203,7 @@ body {
   color: #1e3a8a;
 }
 
-/* Forgot password link */
+
 .forgotPassword {
   display: block;
   text-align: right;
@@ -219,7 +217,7 @@ body {
   color: #ef4444;
 }
 
-/* Animated semi-truck */
+
 .truckContainer {
   position: absolute;
   width: 100%;
@@ -237,7 +235,7 @@ body {
   animation: driveTruck 15s linear infinite;
 }
 
-/* Add a second truck going the other direction */
+
 .truck:nth-child(2) {
   top: 40px;
   transform: scaleX(-1);
@@ -245,13 +243,13 @@ body {
   animation-delay: 5s;
 }
 
-/* Form field group */
+
 .fieldGroup {
   margin-bottom: 16px;
   position: relative;
 }
 
-/* Field label */
+
 .fieldLabel {
   display: block;
   margin-bottom: 6px;
@@ -261,7 +259,7 @@ body {
   text-align: left;
 }
 
-/* Error message styling */
+
 .errorMessage {
   color: #ef4444;
   font-size: 13px;
@@ -269,7 +267,7 @@ body {
   text-align: left;
 }
 
-/* Success message styling */
+
 .successMessage {
   color: #10b981;
   font-size: 14px;
@@ -280,9 +278,7 @@ body {
   border-radius: 6px;
 }
 
-/* Animation keyframes */
 
-/* Fade in animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -294,7 +290,7 @@ body {
   }
 }
 
-/* Truck animation */
+
 @keyframes driveTruck {
   0% {
     left: -100px;
@@ -315,7 +311,7 @@ body {
   }
 }
 
-/* Media queries */
+
 @media (max-width: 480px) {
   .authContainer {
     width: 95%;
@@ -330,7 +326,7 @@ body {
   }
 }
 
-/* Loading indicator for button */
+
 .loadingIndicator {
   display: inline-block;
   position: relative;
@@ -359,13 +355,13 @@ body {
   }
 }
 
-/* Button loading state */
+
 .authButton.loading {
   background-color: #2c4999;
   cursor: not-allowed;
 }
 
-/* Additional truck animation in the background */
+
 .roadAnimation {
   position: absolute;
   bottom: 0;

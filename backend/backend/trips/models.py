@@ -17,7 +17,7 @@ class Trip(models.Model):
     main_office_address = models.TextField(default="Unknown")
     home_terminal_address = models.TextField(default="Unknown")
     truck_trailer_info = models.TextField(default="Unknown")
-    created_at = models.DateTimeField(auto_now_add=True)  # Track submission date
+    created_at = models.DateTimeField(auto_now_add=True) 
     
     def __str__(self):
         return f"Trip by {self.user.username} on {self.created_at.date()}"

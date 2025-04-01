@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { format, parseISO, addHours, startOfDay, endOfDay } from 'date-fns';
+import "./css/Logsheet.css";
 
 const LogInputForm = ({ logs, setLogs, nextStep }) => {
   const [formData, setFormData] = useState({
@@ -10,19 +11,19 @@ const LogInputForm = ({ logs, setLogs, nextStep }) => {
     remarks: ""
   });
 
-  // Preset start time to 00:00 of current day when component mounts
+  
   useEffect(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
-    // If this is the first entry, set start time to 00:00
+    
     if (logs.length === 0) {
       setFormData(prev => ({
         ...prev,
         startTime: format(today, "yyyy-MM-dd'T'HH:mm")
       }));
     } else {
-      // If not the first entry, start time is the end time of previous entry
+      
       const lastEntry = logs[logs.length - 1];
       setFormData(prev => ({
         ...prev,
@@ -39,7 +40,7 @@ const LogInputForm = ({ logs, setLogs, nextStep }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validate end time is after start time
+    
     const startTime = parseISO(formData.startTime);
     const endTime = parseISO(formData.endTime);
     
@@ -48,7 +49,7 @@ const LogInputForm = ({ logs, setLogs, nextStep }) => {
       return;
     }
 
-    // Conditional validation for location and remarks
+    
     if (formData.dutyStatus !== "Driving") {
       if (!formData.location || !formData.remarks) {
         alert("Location and Remarks are required for non-driving statuses");
@@ -56,18 +57,18 @@ const LogInputForm = ({ logs, setLogs, nextStep }) => {
       }
     }
 
-    // Check if end time is within the same day
+    
     const endOfCurrentDay = endOfDay(startTime);
     if (endTime > endOfCurrentDay) {
       alert("Entries must be within the same day");
       return;
     }
 
-    // Add entry to logs
+    
     const newEntry = { ...formData };
     setLogs([...logs, newEntry]);
 
-    // Reset form for next entry, keeping start time as previous end time
+    
     setFormData(prev => ({
       startTime: newEntry.endTime,
       endTime: "",
@@ -165,14 +166,7 @@ const LogInputForm = ({ logs, setLogs, nextStep }) => {
           >
             Add Entry
           </button>
-          {/* <button 
-            type="button"
-            onClick={nextStep} 
-            disabled={logs.length === 0}
-            className="flex-1 bg-green-500 text-white p-2 rounded hover:bg-green-600 disabled:opacity-50"
-          >
-            Next
-          </button> */}
+          
         </div>
       </form>
     </div>

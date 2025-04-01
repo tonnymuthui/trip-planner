@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import GenerateReport from '../components/GenerateReport'; 
 import './css/ReportViewer.css';
+import Navbar from "../components/NavBar"
+
 
 const ReportViewer = () => {
     const [trips, setTrips] = useState([]);
@@ -33,7 +35,7 @@ const ReportViewer = () => {
       const tripId = event.target.value;
       setSelectedTripId(tripId);
       
-      // Reset trip details when selecting a new trip or clearing selection
+      
       if (!tripId) {
         setTripDetails(null);
       }
@@ -55,7 +57,9 @@ const ReportViewer = () => {
     );
   
     return (
+      <div><Navbar/>
       <div className="trip-viewer-container">
+        
         <div className="trip-selector">
           <h1>View a Report / Log Sheet</h1>
           <div className="select-container">
@@ -76,7 +80,7 @@ const ReportViewer = () => {
           </div>
         </div>
         
-        {/* Report Section */}
+        
         <div className="report-section">
           {selectedTripId ? (
             <GenerateReport selectedTripId={selectedTripId} />
@@ -86,6 +90,7 @@ const ReportViewer = () => {
             </div>
           )}
         </div>
+      </div>
       </div>
     );
   };

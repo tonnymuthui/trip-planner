@@ -1,4 +1,4 @@
-# utils.py
+
 import requests
 import time
 from decimal import Decimal
@@ -11,10 +11,10 @@ def geocode_location(location_text):
         return None, None
         
     try:
-        # Add a small delay to respect Nominatim's usage policy
+        
         time.sleep(1)
         
-        # Make request to Nominatim
+        
         response = requests.get(
             'https://nominatim.openstreetmap.org/search',
             params={
@@ -37,7 +37,7 @@ def geocode_location(location_text):
     
     return None, None
 
-# You can then use this in your save methods or in a signal:
+
 
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -46,7 +46,7 @@ from .models import Trip, LogEntry
 @receiver(pre_save, sender=Trip)
 def geocode_trip_locations(sender, instance, **kwargs):
     """Geocode trip start and destination locations if needed"""
-    # Only geocode if coordinates aren't already set
+    
     if not instance.start_latitude or not instance.start_longitude:
         lat, lon = geocode_location(instance.start_location)
         if lat and lon:

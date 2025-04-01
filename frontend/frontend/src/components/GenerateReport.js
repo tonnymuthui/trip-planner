@@ -3,7 +3,7 @@ import axios from "axios";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from "recharts";
 import "./css/report.css";
 
-// Constant mappings for duty status
+
 const DUTY_STATUS = {
   "Off Duty": 0,
   "Sleeper Berth": 1,
@@ -11,13 +11,13 @@ const DUTY_STATUS = {
   "On Duty": 3,
 };
 
-// Colors for different duty statuses
-const STATUS_COLORS = {
-  "Off Duty": "#6c757d",
-  "Sleeper Berth": "#17a2b8",
-  "Driving": "#28a745",
-  "On Duty": "#dc3545",
-};
+
+// const STATUS_COLORS = {
+//   "Off Duty": "#6c757d",
+//   "Sleeper Berth": "#17a2b8",
+//   "Driving": "#28a745",
+//   "On Duty": "#dc3545",
+// };
 
 const GenerateReport = ({ selectedTripId }) => {
   const [tripId, setTripId] = useState(selectedTripId || "");
@@ -26,7 +26,7 @@ const GenerateReport = ({ selectedTripId }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Effect to automatically load data when selectedTripId is provided
+  
   useEffect(() => {
     if (selectedTripId) {
       setTripId(selectedTripId);
@@ -60,7 +60,7 @@ const GenerateReport = ({ selectedTripId }) => {
       console.log("Trip Details:", tripDetails);
       console.log("User inside tripDetails:", tripDetails.user);
 
-      // Sort log data by time
+      
       const sortedLogData = logResponse.data.sort((a, b) => 
         new Date(a.start_time) - new Date(b.start_time)
       );
@@ -79,16 +79,15 @@ const GenerateReport = ({ selectedTripId }) => {
     }
   };
 
-  // Format log data for the chart
   const prepareChartData = () => {
     if (!logData.length) return [];
     
-    // Create data points for each status change
+    
     return logData.map(log => ({
       time: new Date(log.start_time).toLocaleTimeString([], { 
         hour: "2-digit", 
         minute: "2-digit",
-        hour12: false // Use 24-hour format
+        hour12: false 
       }),
       timestamp: new Date(log.start_time).getTime(),
       status: log.duty_status,
@@ -99,7 +98,7 @@ const GenerateReport = ({ selectedTripId }) => {
 
   const formattedLogData = prepareChartData();
 
-  // Custom tooltip for the chart
+  
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
@@ -116,6 +115,7 @@ const GenerateReport = ({ selectedTripId }) => {
 
   return (
     <div className="report-container">
+
       <h2 className="report-header">Driver Trip Report</h2>
 
       <div className="input-section">
@@ -235,7 +235,7 @@ const GenerateReport = ({ selectedTripId }) => {
         </div>
       )}
 
-      {/* Print/Export section */}
+      
       {tripDetails && (
         <div className="report-actions">
           <button 

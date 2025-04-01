@@ -1,0 +1,241 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    box-shadow: 8px 0 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    transition: width 0.3s ease, transform 0.3s ease;
+    overflow: hidden;
+}
+
+
+.navbar::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle at center, 
+        rgba(255,255,255,0.1) 0%, 
+        transparent 70%
+    );
+    animation: pulse 5s infinite alternate;
+    opacity: 0.3;
+    z-index: 1;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+    100% {
+        transform: scale(1.1);
+        opacity: 0.5;
+    }
+}
+
+
+.navbar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(
+            45deg, 
+            rgba(52, 152, 219, 0.1) 25%, 
+            transparent 25%, 
+            transparent 50%, 
+            rgba(52, 152, 219, 0.1) 50%, 
+            rgba(52, 152, 219, 0.1) 75%, 
+            transparent 75%, 
+            transparent
+        );
+    background-size: 40px 40px;
+    opacity: 0.3;
+    z-index: 2;
+}
+
+
+.navbar.closed {
+    width: 80px;
+    overflow: hidden;
+}
+
+.menu-toggle {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--sidebar-text);
+    cursor: pointer;
+    font-size: 1.5rem;
+    z-index: 10;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+
+.navbar-profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+}
+
+.navbar-profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid var(--accent-color);
+    margin-right: 15px;
+    background: linear-gradient(135deg, #3498db, #2c3e50);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.navbar-profile-details {
+    flex-grow: 1;
+}
+
+.navbar-profile-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--sidebar-text);
+}
+
+.navbar-profile-role {
+    font-size: 0.8rem;
+    color: rgba(236, 240, 241, 0.7);
+}
+
+.navbar-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    position: relative;
+    z-index: 10;
+}
+
+.navbar.closed .navbar-title {
+    opacity: 0;
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding: 0;
+    position: relative;
+    z-index: 10;
+}
+
+.navbar-links li {
+    position: relative;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: left;
+    color: var(--sidebar-text);
+}
+
+
+.navbar-links li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        120deg, 
+        transparent, 
+        rgba(255,255,255,0.1), 
+        transparent
+    );
+    transition: all 0.5s ease;
+}
+
+.navbar-links li:hover::before {
+    left: 100%;
+}
+
+.navbar-links li:hover {
+    transform: translateX(10px);
+    background-color: rgba(255,255,255,0.1);
+}
+
+
+.navbar-links li::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent-color);
+    transition: width 0.3s ease;
+}
+
+.navbar-links li:hover::after {
+    width: 100%;
+}
+
+
+.logout {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-top: auto;
+    position: relative;
+    z-index: 10;
+    padding: 12px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logout:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+    transform: translateX(5px);
+}
+
+
+@media (max-width: 1024px) {
+    .navbar {
+        transform: translateX(-100%);
+    }
+    
+    .navbar.open {
+        transform: translateX(0);
+    }
+}

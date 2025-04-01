@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-// import {motion} from "framer-motion";
-// import { Card, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { ArrowRight, ClipboardCheck } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -11,13 +9,19 @@ import { format } from "date-fns";
 import { FaClock, FaMapMarkerAlt, FaUser, FaBars } from "react-icons/fa";
 import "./css/backup.css";
 
+
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [totalHours, setTotalHours] = useState(0);
   const [user, setUser] = useState({ name: "John Doe" });
-  const [lastLocation, setLastLocation] = useState({ lat: 37.7749, lng: -122.4194 }); // Example: San Francisco
+  const [lastLocation, setLastLocation] = useState({ lat: 37.7749, lng: -122.4194 }); 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");  
+    navigate("/login");  
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -46,11 +50,7 @@ const Dashboard = () => {
     return () => clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    // Simulate fetching total hours logged in the past 7 days
-    setTotalHours(42);
-  }, []);
-
+  
   return (
     <div className="dashboard-container">
       <aside className={`sidebar ${sidebarOpen ? "open" : "closed"}`}>
@@ -70,7 +70,7 @@ const Dashboard = () => {
           <li>Overview</li>
           <li onClick={() => navigate("/reportviewer")}>Logs</li>
           <li onClick={() => navigate("/tripviewer")}>View Trip Route</li>
-          <li>Log Out</li>
+          <li onClick={handleLogout}>Log Out</li>
         </ul>
       </aside>
 

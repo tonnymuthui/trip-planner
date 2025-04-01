@@ -1,7 +1,8 @@
 .trip-viewer-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+    width: calc(100% - 250px); 
+    margin-left: 250px; 
+    padding: 30px;
+    box-sizing: border-box;
   }
   
   .trip-selector {

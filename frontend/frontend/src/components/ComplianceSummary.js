@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaClock } from "react-icons/fa";
-import "./css/ComplianceSummary.css";
+
 
 const ComplianceSummary = () => {
   const [totalDrivenTime, setTotalDrivenTime] = useState(0);
@@ -39,7 +39,14 @@ const ComplianceSummary = () => {
         <p className="error-message">{error}</p>
       ) : (
         <>
-          <h2 className="heading">   Compliance Summary</h2>
+          <h2 className="heading" style={{
+    textAlign: "center",
+    fontFamily: "Helvetica, Arial, sans-serif",
+    color: "#2c3e50",
+    fontSize: "1.2em",
+    fontWeight: "600"
+  }}
+  >   Compliance Summary</h2>
           <div className="metric-card">
             <FaClock className="icon" />
             <div className="metric">

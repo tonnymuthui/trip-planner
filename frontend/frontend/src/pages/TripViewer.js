@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import TripMap from '../components/TripMap';
-import './css/TripViewer.css';
+import './css/TripViewer.css'
+import Navbar from '../components/NavBar';
 
 const TripViewer = () => {
     const [trips, setTrips] = useState([]);
@@ -37,6 +38,8 @@ const TripViewer = () => {
     if (trips.length === 0) return <div className="no-data">No trips available</div>;
   
     return (
+      <div>
+        <Navbar/>
       <div className="trip-viewer-container">
         <div className="trip-selector">
           <h1>Trip Viewer</h1>
@@ -58,6 +61,7 @@ const TripViewer = () => {
         </div>
         
         {selectedTripId && <TripMap tripId={selectedTripId} />}
+      </div>
       </div>
     );
   };

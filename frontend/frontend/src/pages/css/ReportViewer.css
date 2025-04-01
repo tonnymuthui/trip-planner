@@ -1,4 +1,4 @@
-/* ReportViewer.css - Enhanced for elegance and better spacing */
+
 
 body, html {
   margin: 0;
@@ -8,9 +8,11 @@ body, html {
 }
 
 .trip-viewer-container {
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
+  width: calc(100% - 250px); 
+  margin-left: 250px;
+  /* width: 100%;
+  max-width: 100%; */
+  /* margin: 0 auto; */
   padding: 30px;
   box-sizing: border-box;
 }
@@ -153,7 +155,7 @@ body, html {
   overflow: visible;
 }
 
-/* For the print functionality */
+
 @media print {
   .trip-selector {
     display: none;
@@ -173,7 +175,7 @@ body, html {
   }
 }
 
-/* Responsive adjustments */
+
 @media (max-width: 768px) {
   .trip-viewer-container {
     padding: 15px;

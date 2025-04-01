@@ -1,4 +1,3 @@
-/* report.css - Enhanced for elegant visualization */
 
 .report-container {
   font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -398,7 +397,7 @@
   background-repeat: no-repeat;
 }
 
-/* Print styles */
+
 @media print {
   .input-section, .report-actions {
     display: none;
@@ -426,7 +425,7 @@
   }
 }
 
-/* Responsive adjustments */
+
 @media (max-width: 768px) {
   .report-container {
     padding: 0;
@@ -450,7 +449,7 @@
   }
 }
 
-/* For larger screens, make use of full width */
+
 @media (min-width: 1400px) {
   .chart-container {
     height: 450px !important;

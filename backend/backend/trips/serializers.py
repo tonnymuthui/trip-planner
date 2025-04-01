@@ -19,7 +19,6 @@ class LogEntrySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        # We don't need to manually fetch the trip instance, as the serializer will handle it
         return super().create(validated_data)
 
 

@@ -38,19 +38,19 @@ const TripMap = ({ tripId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch trip data
+  
   useEffect(() => {
     const fetchTripData = async () => {
       try {
         setLoading(true);
-        // Now using trip_id in the URL
+        
         const token = localStorage.getItem("authToken");
         const response = await axios.get(`http://127.0.0.1:8000/api/trips/${tripId}/`, 
             { headers: { Authorization: `Bearer ${token}` } }
         );
         setTrip(response.data);
         
-        // Fetch the log entries for this trip
+        
         const logsResponse = await axios.get(`http://127.0.0.1:8000/api/trips/${tripId}/logs/`,
             { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -67,13 +67,13 @@ const TripMap = ({ tripId }) => {
     }
   }, [tripId]);
 
-  // Process and geocode location data
+  
   const processLocationData = async (tripData, logEntries) => {
     try {
-      // Check if coordinates are already provided by the backend
+      
       const useBackendCoordinates = tripData.start_latitude && tripData.start_longitude;
       
-      // Start with trip start and end locations
+      
       const locationData = [
         {
           id: 'start',
@@ -81,7 +81,7 @@ const TripMap = ({ tripId }) => {
           type: 'start',
           logs: [],
           timestamp: new Date(tripData.created_at).toISOString(),
-          // Use coordinates from backend if available
+          
           coordinates: useBackendCoordinates ? 
             [parseFloat(tripData.start_latitude), parseFloat(tripData.start_longitude)] : null
         },
@@ -91,13 +91,13 @@ const TripMap = ({ tripId }) => {
           type: 'end',
           logs: [],
           timestamp: new Date(Math.max(...logEntries.map(log => new Date(log.end_time)))).toISOString(),
-          // Use coordinates from backend if available
+          
           coordinates: useBackendCoordinates && tripData.destination_latitude && tripData.destination_longitude ? 
             [parseFloat(tripData.destination_latitude), parseFloat(tripData.destination_longitude)] : null
         }
       ];
 
-      // Group log entries by location
+      
       const locationGroups = {};
       
       logEntries.forEach(log => {
@@ -110,7 +110,7 @@ const TripMap = ({ tripId }) => {
             type: 'intermediate',
             logs: [],
             timestamp: new Date(log.start_time).toISOString(),
-            // Use coordinates from backend if available
+            
             coordinates: log.latitude && log.longitude ? 
               [parseFloat(log.latitude), parseFloat(log.longitude)] : null
           };
@@ -124,7 +124,7 @@ const TripMap = ({ tripId }) => {
           remarks: log.remarks || 'No remarks'
         });
         
-        // Update timestamp to earliest time for sorting purposes
+        
         const logTime = new Date(log.start_time);
         const currentTime = new Date(locationGroups[log.location].timestamp);
         if (logTime < currentTime) {
@@ -132,28 +132,28 @@ const TripMap = ({ tripId }) => {
         }
       });
       
-      // Add grouped locations to our location data
+      
       Object.values(locationGroups).forEach(group => {
         locationData.push(group);
       });
       
-      // Sort by timestamp to ensure chronological order
+      
       locationData.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
       
-      // Move end location to the end regardless of timestamp
+      
       const endIndex = locationData.findIndex(loc => loc.type === 'end');
       if (endIndex !== -1 && endIndex !== locationData.length - 1) {
         const endLocation = locationData.splice(endIndex, 1)[0];
         locationData.push(endLocation);
       }
       
-      // Geocode locations only if coordinates aren't available from backend
+      
       let geocodedLocations = [];
       
       if (useBackendCoordinates) {
-        // Use coordinates from backend
+        
         geocodedLocations = locationData.map(location => {
-          // If coordinates are null, try to find matching location coordinates from other points
+          
           if (!location.coordinates) {
             const match = locationData.find(loc => 
               loc.name.toLowerCase() === location.name.toLowerCase() && loc.coordinates
@@ -161,7 +161,7 @@ const TripMap = ({ tripId }) => {
             if (match) {
               return { ...location, coordinates: match.coordinates };
             } else {
-              // If still no match, we'll need to geocode this one
+              
               return location;
             }
           }
@@ -169,7 +169,7 @@ const TripMap = ({ tripId }) => {
         });
       }
       
-      // Geocode any remaining locations without coordinates
+      
       const locationsToGeocode = geocodedLocations.length > 0 ? 
         geocodedLocations.filter(loc => !loc.coordinates) : 
         locationData;
@@ -185,7 +185,7 @@ const TripMap = ({ tripId }) => {
           })
         );
         
-        // Merge newly geocoded locations with any that already had coordinates
+        
         if (geocodedLocations.length > 0) {
           geocodedLocations = geocodedLocations.map(loc => {
             if (!loc.coordinates) {
@@ -205,12 +205,12 @@ const TripMap = ({ tripId }) => {
     }
   };
 
-  // Geocode a text location to [lat, lng] coordinates
+  
   const geocodeLocation = async (locationText) => {
     if (!locationText) return null;
   
     try {
-        // Call your Django backend instead of Nominatim directly
+        
         const response = await axios.get(`http://localhost:8000/api/geocode/`, {
             params: { location: locationText }
         });
@@ -225,7 +225,7 @@ const TripMap = ({ tripId }) => {
     }
 };
 //     try {
-    //   Using Nominatim (OpenStreetMap) geocoding service
+    
 //       const response = await axios.get(`https://nominatim.openstreetmap.org/search`, {
 //         params: {
 //           q: locationText,
@@ -251,11 +251,11 @@ const TripMap = ({ tripId }) => {
   if (error) return <div className="error">{error}</div>;
   if (!trip || locations.length === 0) return <div className="no-data">No trip data available</div>;
 
-  // Find center point of the map
+  
   const bounds = L.latLngBounds(locations.map(loc => loc.coordinates));
   const center = bounds.getCenter();
   
-  // Extract only coordinates for the polyline
+ 
   const routeCoordinates = locations.map(loc => loc.coordinates);
 
   return (
@@ -279,7 +279,7 @@ const TripMap = ({ tripId }) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         
-        {/* Draw the route as a polyline */}
+        
         <Polyline 
           positions={routeCoordinates}
           color="blue"
@@ -287,7 +287,7 @@ const TripMap = ({ tripId }) => {
           opacity={0.7}
         />
         
-        {/* Place markers for each location */}
+        
         {locations.map((location, index) => (
           <Marker 
             key={location.id}

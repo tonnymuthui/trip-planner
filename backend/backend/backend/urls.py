@@ -18,7 +18,7 @@ from django.contrib import admin
 
 from django.http import HttpResponse
 from django.urls import path, include
-# from rest_framework.routers import DefaultRouter
+
 from trips.views import SignupView, LoginView, TripViewSet, LogEntryViewSet  
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,  
@@ -26,9 +26,6 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
-# router = DefaultRouter()
-# router.register(r'trips', TripViewSet)
-# router.register(r'logentries', LogEntryViewSet)
 
 def home(request):
     return HttpResponse("Welcome to the Trip Planner API!")

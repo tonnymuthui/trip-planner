@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import TripDetails from "./TripDetails";
+import { useNavigate } from "react-router-dom";
 import LogInputForm from "./LogInputForm";
 import axios from "axios";
 import "./css/Multistepform.css";
@@ -32,7 +33,7 @@ const MultiStepForm = () => {
   };
 
   const formatDateTime = (datetime) => {
-    return datetime ? new Date(datetime).toISOString() : null;  // Ensure valid ISO format
+    return datetime ? new Date(datetime).toISOString() : null;  
   };
 
   const handleSubmit = async () => {
@@ -53,7 +54,7 @@ const MultiStepForm = () => {
         return;
       }
 
-      // 1️⃣ Submit the trip
+      
       const tripResponse = await axios.post(
         "http://127.0.0.1:8000/api/create_trip/",
         formData.tripDetails,
@@ -62,12 +63,12 @@ const MultiStepForm = () => {
       
       console.log("Trip submitted successfully:", tripResponse.data);
 
-      const tripId = tripResponse.data.trip_id; // Ensure trip_id exists
+      const tripId = tripResponse.data.trip_id; 
       if (!tripId) {
         throw new Error("Trip ID missing in API response");
       }
 
-      // 2️⃣ Format logs before submission with correct field names
+     
       const formattedLogs = formData.logs.map(log => ({
         start_time: formatDateTime(log.startTime),
         end_time: formatDateTime(log.endTime),
@@ -77,7 +78,7 @@ const MultiStepForm = () => {
         trip: tripId, 
       }));
 
-      // 3️⃣ Submit logs in one request instead of multiple
+      
       if (formattedLogs.length > 0) {
         await axios.post(
           `http://127.0.0.1:8000/api/trips/${tripId}/logs/`,
@@ -92,27 +93,44 @@ const MultiStepForm = () => {
       alert("Failed to submit trip and logs.");
     }
   };
+  const navigate = useNavigate();
 
   return (
-    <div>
-      {step === 1 && (
-        <TripDetails 
-          data={formData.tripDetails} 
-          handleChange={(e) => handleChange("tripDetails", { ...formData.tripDetails, [e.target.name]: e.target.value })} 
-        />
-      )}
-      {step === 2 && (
-        <LogInputForm 
-          logs={formData.logs} 
-          setLogs={(data) => handleChange("logs", data)} 
-        />
-      )}
+    <div className="multistep-form-container">
+  
+  <div className="form-header">
+    <h1>Trip Log Form</h1>
+    <p>Please complete all required information</p>
+  </div>
+  
+  <div className="progress-container">
+    <div className="progress-bar" style={{width: step === 1 ? '0%' : '100%'}}></div>
+    <div className={`step-indicator ${step >= 1 ? 'active' : ''}`}>1</div>
+    <div className={`step-indicator ${step >= 2 ? 'active' : ''}`}>2</div>
+  </div>
+  
+  
+  <div className="form-content fade-in">
+    {step === 1 && (
+      <TripDetails 
+        data={formData.tripDetails} 
+        handleChange={(e) => handleChange("tripDetails", { ...formData.tripDetails, [e.target.name]: e.target.value })} 
+      />
+    )}
+    {step === 2 && (
+      <LogInputForm 
+        logs={formData.logs} 
+        setLogs={(data) => handleChange("logs", data)} 
+      />
+    )}
+  </div>
 
-      <div className="button-container">
-        {step > 1 && <button className="prev" onClick={prevStep}>Previous</button>}
-        {step === 1 ? <button className="next" onClick={nextStep}>Next</button> : <button className="submit" onClick={handleSubmit}>Submit</button>}
-      </div>
-    </div>
+  <div className="button-container">
+    {step > 1 && <button className="prev" onClick={prevStep}>Previous</button>}
+    {step === 1 ? <button className="next" onClick={nextStep}>Next</button> : <button className="submit" onClick={handleSubmit}>Submit</button>}
+  </div>
+  <button className="home" onClick={() => navigate("/dashboard")} >GO BACK HOME</button>
+</div>
   );
 };
 

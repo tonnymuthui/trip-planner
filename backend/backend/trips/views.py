@@ -1,5 +1,3 @@
-
-
 # Create your views here.
 
 from rest_framework.decorators import api_view, permission_classes, action
@@ -39,7 +37,7 @@ class SignupView(APIView):
         return Response({"message": "User created successfully", "token": token.key}, status=status.HTTP_201_CREATED)
 
 class LoginView(APIView):
-    permission_classes = [AllowAny]  # ✅ Allow login without authentication
+    permission_classes = [AllowAny] 
 
     def post(self, request):
         username = request.data.get("username")
@@ -48,7 +46,7 @@ class LoginView(APIView):
         user = authenticate(username=username, password=password)
 
         if user:
-            refresh = RefreshToken.for_user(user)  # ✅ Generate JWT tokens correctly
+            refresh = RefreshToken.for_user(user)  
             return Response({
                 "message": "Login successful",
                 "authToken": str(refresh.access_token),  
@@ -66,12 +64,12 @@ def create_trip(request):
     user = request.user  
     today = date.today()
 
-    # Check if a trip already exists for today
+    
     existing_trip = Trip.objects.filter(user=user, created_at__date=today).first()
 
     if existing_trip:
         print("Trip exists. Updating instead of creating a new one.")
-        serializer = TripSerializer(existing_trip, data=request.data, partial=True)  # Allow partial updates
+        serializer = TripSerializer(existing_trip, data=request.data, partial=True) 
     else:
         serializer = TripSerializer(data=request.data)
 
@@ -129,43 +127,43 @@ class TripLogsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, trip_id):
-        print("Received trip logs data:", request.data)  # Debugging
+        print("Received trip logs data:", request.data) 
         trip = get_object_or_404(Trip, trip_id=trip_id, user=request.user)
         logs = LogEntry.objects.filter(trip=trip)
         serializer = LogEntrySerializer(logs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request, trip_id):  # 🚀 ADDING POST METHOD
+    def post(self, request, trip_id): 
         trip = get_object_or_404(Trip, trip_id=trip_id, user=request.user)
         print("Incoming data:", request.data)
         
-        log_data = request.data  # Ensure this is a list of dictionaries
+        log_data = request.data 
 
-        # Iterate over each log entry and update the trip field
+        
         for log in log_data:
-            log["trip"] = trip.id # ✅ Correct way to assign trip ID to each log entry
+            log["trip"] = trip.id 
 
-        serializer = LogEntrySerializer(data=log_data, many=True)  # ✅ `many=True` is needed!
+        serializer = LogEntrySerializer(data=log_data, many=True)  
 
         if serializer.is_valid():
-            serializer.save()  # Save all logs at once
+            serializer.save()  
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
-        print("Validation errors:", serializer.errors)  # Debugging
+        print("Validation errors:", serializer.errors)  
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         
 class TripViewSet(viewsets.ModelViewSet):
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
-    lookup_field = 'trip_id'  # Use trip_id instead of id for lookups
+    lookup_field = 'trip_id'  
     
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return TripDetailSerializer
         return TripSerializer
     
-    # Optional: Filter trips by the current user
+    
     def get_queryset(self):
         user = self.request.user
         if user.is_authenticated:
@@ -184,12 +182,12 @@ class LogEntryViewSet(viewsets.ModelViewSet):
     queryset = LogEntry.objects.all()
     serializer_class = LogEntrySerializer
     
-    # Filter log entries by trip_id
+    
     def get_queryset(self):
         queryset = LogEntry.objects.all().order_by('start_time')
         trip_id = self.request.query_params.get('trip_id', None)
         if trip_id:
-            queryset = queryset.filter(trip__trip_id=trip_id)  # Note the trip__trip_id syntax
+            queryset = queryset.filter(trip__trip_id=trip_id)  
         return queryset
 
 
@@ -197,7 +195,7 @@ class UserInfoView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # Access the current user using request.user
+        
         username = request.user.username
         return Response({"username": username}, status=status.HTTP_200_OK)
 
@@ -207,7 +205,7 @@ class ComplianceSummaryView(APIView):
     def get(self, request):
         user = request.user
         today = timezone.now()
-        start_date = today - timedelta(days=8)  # 8 days ago from today
+        start_date = today - timedelta(days=8)  
 
         logs = LogEntry.objects.filter(
             trip__user=user,
@@ -215,27 +213,27 @@ class ComplianceSummaryView(APIView):
             end_time__lte=today
         )
 
-        print(f"Total logs fetched: {logs.count()}")  # Debugging line
+        print(f"Total logs fetched: {logs.count()}")  
 
         total_driven_time = timedelta() 
         total_on_duty_time = timedelta()
 
         for log in logs:
-            print(f"Duty Status: {log.duty_status}")  # Debugging line
+            print(f"Duty Status: {log.duty_status}") 
             duration = log.end_time - log.start_time
-            print(f"Log from {log.start_time} to {log.end_time}, Duration: {duration}")  # Debugging line
+            print(f"Log from {log.start_time} to {log.end_time}, Duration: {duration}")  
             if log.duty_status == "Driving":
-                total_driven_time += duration  # Accumulating the time for "driving" logs
-                print(f"Cumulative Total Driven Time: {total_driven_time}")  # Debugging line
+                total_driven_time += duration  
+                print(f"Cumulative Total Driven Time: {total_driven_time}")  
     
             elif log.duty_status == "On Duty":
-                total_on_duty_time += duration  # Accumulating for on-duty logs
+                total_on_duty_time += duration  
 
         max_driving_time = timedelta(hours=70)
         remaining_time_to_drive = max_driving_time - total_driven_time
 
-        print(f"Total driven time: {total_driven_time.total_seconds() / 3600} hours")  # Debugging line
-        print(f"Remaining time to drive: {remaining_time_to_drive.total_seconds() / 3600} hours")  # Debugging line
+        print(f"Total driven time: {total_driven_time.total_seconds() / 3600} hours") 
+        print(f"Remaining time to drive: {remaining_time_to_drive.total_seconds() / 3600} hours")  
 
         return Response({
             "total_driven_time": total_driven_time.total_seconds() / 3600,
