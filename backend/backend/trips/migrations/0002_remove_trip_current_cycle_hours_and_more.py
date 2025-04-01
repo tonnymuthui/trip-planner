@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='trip',
             name='trip_id',
-            field=models.CharField(default='Unknown', max_length=4, unique=True),
+            field=models.CharField(default='Unknown', max_length=10, unique=True),
         ),
         migrations.AddField(
             model_name='trip',

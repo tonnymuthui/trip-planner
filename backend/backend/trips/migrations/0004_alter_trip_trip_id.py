@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='trip',
             name='trip_id',
-            field=models.CharField(default='0000', max_length=4, unique=True),
+            field=models.CharField(default='0000', max_length=10, unique=True),
         ),
     ]
