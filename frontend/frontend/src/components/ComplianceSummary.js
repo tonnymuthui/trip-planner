@@ -18,7 +18,7 @@ const ComplianceSummary = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:8000/api/compliance-summary/", {
+        const response = await axios.get("https://trip-planner-1-x88j.onrender.com/api/compliance-summary/", {
           headers: { Authorization: `Bearer ${token}` }
         });
 

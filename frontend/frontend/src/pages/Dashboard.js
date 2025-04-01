@@ -29,7 +29,7 @@ const Dashboard = () => {
     
     const fetchUser = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/user/", {
+        const response = await axios.get("https://trip-planner-1-x88j.onrender.com/api/user/", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

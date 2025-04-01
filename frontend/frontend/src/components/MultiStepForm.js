@@ -56,7 +56,7 @@ const MultiStepForm = () => {
 
       
       const tripResponse = await axios.post(
-        "http://127.0.0.1:8000/api/create_trip/",
+        "https://trip-planner-1-x88j.onrender.com/api/create_trip/",
         formData.tripDetails,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -81,7 +81,7 @@ const MultiStepForm = () => {
       
       if (formattedLogs.length > 0) {
         await axios.post(
-          `http://127.0.0.1:8000/api/trips/${tripId}/logs/`,
+          `https://trip-planner-1-x88j.onrender.com/api/trips/${tripId}/logs/`,
           formattedLogs,
           { headers: { Authorization: `Bearer ${token}`} } 
         );

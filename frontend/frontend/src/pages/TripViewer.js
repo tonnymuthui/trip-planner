@@ -15,7 +15,7 @@ const TripViewer = () => {
         try {
           setLoading(true);
           const token = localStorage.getItem("authToken");
-          const response = await axios.get(`http://localhost:8000/api/trips/`, 
+          const response = await axios.get(`https://trip-planner-1-x88j.onrender.com/api/trips/`, 
             { headers: { Authorization: `Bearer ${token}` } 
           });
           setTrips(response.data);

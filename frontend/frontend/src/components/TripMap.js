@@ -45,13 +45,13 @@ const TripMap = ({ tripId }) => {
         setLoading(true);
         
         const token = localStorage.getItem("authToken");
-        const response = await axios.get(`http://127.0.0.1:8000/api/trips/${tripId}/`, 
+        const response = await axios.get(`https://trip-planner-1-x88j.onrender.com/api/trips/${tripId}/`, 
             { headers: { Authorization: `Bearer ${token}` } }
         );
         setTrip(response.data);
         
         
-        const logsResponse = await axios.get(`http://127.0.0.1:8000/api/trips/${tripId}/logs/`,
+        const logsResponse = await axios.get(`https://trip-planner-1-x88j.onrender.com/api/trips/${tripId}/logs/`,
             { headers: { Authorization: `Bearer ${token}` } }
         );
         await processLocationData(response.data, logsResponse.data);
@@ -211,7 +211,7 @@ const TripMap = ({ tripId }) => {
   
     try {
         
-        const response = await axios.get(`http://localhost:8000/api/geocode/`, {
+        const response = await axios.get(`https://trip-planner-1-x88j.onrender.com/api/geocode/`, {
             params: { location: locationText }
         });
 

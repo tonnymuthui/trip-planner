@@ -12,12 +12,6 @@ const DUTY_STATUS = {
 };
 
 
-// const STATUS_COLORS = {
-//   "Off Duty": "#6c757d",
-//   "Sleeper Berth": "#17a2b8",
-//   "Driving": "#28a745",
-//   "On Duty": "#dc3545",
-// };
 
 const GenerateReport = ({ selectedTripId }) => {
   const [tripId, setTripId] = useState(selectedTripId || "");
@@ -45,10 +39,10 @@ const GenerateReport = ({ selectedTripId }) => {
 
     try {
       const token = localStorage.getItem("authToken");
-      const tripResponse = await axios.get(`http://localhost:8000/api/trips/${id}/`,
+      const tripResponse = await axios.get(`https://trip-planner-1-x88j.onrender.com/api/trips/${id}/`,
           { headers: { Authorization: `Bearer ${token}` } }
       );
-      const logResponse = await axios.get(`http://localhost:8000/api/trips/${id}/logs/`,
+      const logResponse = await axios.get(`https://trip-planner-1-x88j.onrender.com/api/trips/${id}/logs/`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
