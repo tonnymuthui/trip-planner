@@ -26,7 +26,7 @@ const ComplianceSummary = () => {
         setRemainingTimeToDrive(response.data.remaining_time_to_drive.toFixed(2));
       } catch (error) {
         console.error("Error fetching compliance data:", error);
-        setError("Failed to fetch compliance data. Please try again later.");
+        setError(" No compliance data available For Current Cycle. ");
       }
     };
 

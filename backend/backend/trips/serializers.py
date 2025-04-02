@@ -5,7 +5,6 @@ from .models import Trip, LogEntry
 class TripSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source='user.username', read_only=True)
 
-    
     class Meta:
         model = Trip
         fields = '__all__'

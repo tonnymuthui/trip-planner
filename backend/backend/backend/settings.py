@@ -87,8 +87,8 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = [
-    'https://trip-planner-six-jade.vercel.app/', 
+CORS_ALLOWED_ORIGINS = [
+    "https://trip-planner-six-jade.vercel.app", 
 ]
 
 
