@@ -81,7 +81,7 @@ const MultiStepForm = () => {
       
       if (formattedLogs.length > 0) {
         await axios.post(
-          `https://trip-planner-1-x88j.onrender.com/api/trips/${trip_id}/logs/`,
+          `https://trip-planner-1-x88j.onrender.com/api/trip-logs/${trip_id}/logs/`,
           formattedLogs,
           { headers: { Authorization: `Bearer ${token}`} } 
         );

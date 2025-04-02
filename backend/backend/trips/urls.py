@@ -13,7 +13,7 @@ urlpatterns = [
     path("geocode/", geocode_location, name="geocode"),
     
     path('trips/<str:trip_id>/report/', TripReportView.as_view(), name='trip_report'), 
-    path('trips/<str:trip_id>/logs/', TripLogsView.as_view(), name='trip_logs'),
+    path('trip-logs/<str:trip_id>/logs/', TripLogsView.as_view(), name='trip_logs'),
     path('user/', UserInfoView.as_view(), name='user_info'),
     path('compliance-summary/', ComplianceSummaryView.as_view(), name='compliance_summary')
 ]
