@@ -42,7 +42,7 @@ const GenerateReport = ({ selectedTripId }) => {
       const tripResponse = await axios.get(`https://trip-planner-1-x88j.onrender.com/api/trips/${id}/`,
           { headers: { Authorization: `Bearer ${token}` } }
       );
-      const logResponse = await axios.get(`https://trip-planner-1-x88j.onrender.com/api/trips/${id}/logs/`,
+      const logResponse = await axios.get(`https://trip-planner-1-x88j.onrender.com/api/trip-logs/${id}/logs/`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
