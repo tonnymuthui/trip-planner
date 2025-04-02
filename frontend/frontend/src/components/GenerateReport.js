@@ -51,8 +51,10 @@ const GenerateReport = ({ selectedTripId }) => {
       }
 
       setTripDetails(tripResponse.data);
-      console.log("Trip Details:", tripDetails);
-      console.log("User inside tripDetails:", tripDetails.user);
+
+
+      console.log("Trip Details (before state update):", tripResponse.data);
+      // console.log("User inside tripDetails:", tripDetails.user);
 
       
       const sortedLogData = logResponse.data.sort((a, b) => 
@@ -66,12 +68,22 @@ const GenerateReport = ({ selectedTripId }) => {
           ? "Trip not found. Please check the Trip ID."
           : "Failed to fetch report. Please try again later."
       );
+
       setTripDetails(null);
       setLogData([]);
+
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (tripDetails) {
+      console.log("Updated Trip Details:", tripDetails);
+      console.log("User inside tripDetails:", tripDetails.user);
+    }
+  }, [tripDetails]);
+
 
   const prepareChartData = () => {
     if (!logData.length) return [];
