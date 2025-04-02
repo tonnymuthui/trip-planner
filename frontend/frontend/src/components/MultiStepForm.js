@@ -63,8 +63,8 @@ const MultiStepForm = () => {
       
       console.log("Trip submitted successfully:", tripResponse.data);
 
-      const tripId = tripResponse.data.trip_id; 
-      if (!tripId) {
+      const trip_id = String(tripResponse.data.trip_id); 
+      if (!trip_id) {
         throw new Error("Trip ID missing in API response");
       }
 
@@ -75,13 +75,13 @@ const MultiStepForm = () => {
         duty_status: log.dutyStatus,
         location: log.location || "Unknown",
         remarks: log.remarks || "N/A",
-        trip: tripId, 
+        trip: trip_id, 
       }));
 
       
       if (formattedLogs.length > 0) {
         await axios.post(
-          `https://trip-planner-1-x88j.onrender.com/api/trips/${tripId}/logs/`,
+          `https://trip-planner-1-x88j.onrender.com/api/trips/${trip_id}/logs/`,
           formattedLogs,
           { headers: { Authorization: `Bearer ${token}`} } 
         );
